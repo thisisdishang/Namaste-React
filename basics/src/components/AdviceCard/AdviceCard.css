@@ -1,0 +1,25 @@
+.card {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.2s ease-in-out;
+    color: #6122b9;
+    width: 10rem;
+    height: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}

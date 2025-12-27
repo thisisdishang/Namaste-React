@@ -1,22 +1,27 @@
 /*
-First component should return "Namaste React!"
-Component => Encapsulation of HTML, CSS and Behavior
+Components:
+    - Components are the building blocks of React application.
+    - Components are reusable and can be nested.
+    - Components consists of HTML, CSS and Behavior.
 */
-function Greeting() {
-    return <h1>Namaste React!</h1>
-}
-
-function Footer() {
-    return <h1>This is the end.</h1>
-}
-
+import AdviceCard from "./components/AdviceCard/AdviceCard";
+import Header from "./components/Header/Header";
 function App() {
+    const advices = [
+        "Plant a Tree!",
+        "Ego is the Enemy!",
+        "Obstacle is the Way!",
+        "Stillness is the Key!",
+        "The Only Constant is Change!",
+    ];
+
     return <>
-        <Greeting />
-        <Footer />
+        <Header />
+        {
+            // I would give list of advices and i want list of AdviceCard Component
+            advices.map(advice => <AdviceCard advice={advice} />)
+        }
     </>
 }
 
-// export the component
-// default export
 export default App;
