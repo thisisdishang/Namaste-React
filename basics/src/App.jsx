@@ -19,20 +19,43 @@ Q3: Where I should create the state?
 import Header from "./components/Header/Header";
 import AdviceCardList from "./components/AdviceCardList/AdviceCardList";
 import SearchBox from "./components/SearchBox/SearchBox";
+import { useState } from "react";
 
 function App() {
+    // destructuring the array
+    const [searchValue, setSearchValue] = useState("")
+    /* 
+    useState is a hook=> is a JavaScript function that returns an array.
+    and that array has two elements - value, function to change the value.
+    */
+
     const advices = [
-        "Plant a Tree!",
-        "Ego is the Enemy!",
-        "Obstacle is the Way!",
-        "Stillness is the Key!",
-        "The Only Constant is Change!",
+        {
+            id: 1,
+            text: "Plant a Tree!"
+        },
+        {
+            id: 2,
+            text: "Ego is the Enemy!"
+        },
+        {
+            id: 3,
+            text: "Obstacle is the Way!"
+        },
+        {
+            id: 4,
+            text: "Stillness is the Key!"
+        },
+        {
+            id: 5,
+            text: "The Only Constant is Change!"
+        },
     ];
 
     return <>
         <Header />
-        <SearchBox placeholder="Search for advice" />
-        <AdviceCardList advices={advices} />
+        <SearchBox placeholder="Search for advice" value={searchValue} changeHandler={(event) => setSearchValue(event.target.value)} />
+        <AdviceCardList advices={advices.filter(advice => advice.text.toLowerCase().includes(searchValue.toLowerCase()))} />
         {/* {
             // I would give list of advices and i want list of AdviceCard Component
             advices.map(advice => <AdviceCard advice={advice} />)

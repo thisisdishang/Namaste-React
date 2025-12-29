@@ -1,8 +1,8 @@
 import AdviceCard from "../AdviceCard/AdviceCard";
 import "./AdviceCardList.css"
-function AdviceCardList(props) {
+function AdviceCardList({ advices }) {
     return <div className="advice-card-list">
-        {props.advices.map(advice => <AdviceCard advice={advice} />)}
+        {advices.map(advice => <AdviceCard advice={advice.text} key={advice.id} />)}
     </div>
 }
 

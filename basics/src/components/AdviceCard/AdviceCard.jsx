@@ -1,8 +1,8 @@
 import './AdviceCard.css';
-function AdviceCard(props) {
+function AdviceCard({ advice }) {
     // Whenever we write JavaScript in JSX we use curl {}
     return <div className="card">
-        <h2>{props.advice}</h2>
+        <h2>{advice}</h2>
     </div>
 }
 
