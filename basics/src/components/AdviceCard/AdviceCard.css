@@ -23,3 +23,13 @@
 .card:hover {
     transform: scale(1.1);
 }
+
+.actionable {
+    background-color: aquamarine;
+    color: #6122b9;
+}
+
+.philosophical {
+    background-color: darkorange;
+    color: #fff;
+}

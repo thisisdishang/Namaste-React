@@ -20,10 +20,18 @@ import Header from "./components/Header/Header";
 import AdviceCardList from "./components/AdviceCardList/AdviceCardList";
 import SearchBox from "./components/SearchBox/SearchBox";
 import { useState } from "react";
+import Filter from "./components/Filter/Filter";
 
 function App() {
     // destructuring the array
-    const [searchValue, setSearchValue] = useState("")
+    const [searchObject, setSearchObject] = useState({ searchValue: "", searchCategory: "all" })
+    /*
+        Here state is object
+        state:{
+            searchValue: '',
+            searchCategory: ''
+        }
+    */
     /* 
     useState is a hook=> is a JavaScript function that returns an array.
     and that array has two elements - value, function to change the value.
@@ -32,30 +40,38 @@ function App() {
     const advices = [
         {
             id: 1,
-            text: "Plant a Tree!"
+            text: "Plant a Tree!",
+            category: "actionable"
         },
         {
             id: 2,
-            text: "Ego is the Enemy!"
+            text: "Ego is the Enemy!",
+            category: "philosophical"
         },
         {
             id: 3,
-            text: "Obstacle is the Way!"
+            text: "Obstacle is the Way!",
+            category: "actionable"
         },
         {
             id: 4,
-            text: "Stillness is the Key!"
+            text: "Stillness is the Key!",
+            category: "philosophical"
         },
         {
             id: 5,
-            text: "The Only Constant is Change!"
+            text: "The Only Constant is Change!",
+            category: "philosophical"
         },
     ];
 
     return <>
         <Header />
-        <SearchBox placeholder="Search for advice" value={searchValue} changeHandler={(event) => setSearchValue(event.target.value)} />
-        <AdviceCardList advices={advices.filter(advice => advice.text.toLowerCase().includes(searchValue.toLowerCase()))} />
+        <div style={{ textAlign: 'center' }}>
+            <SearchBox placeholder="Search for advice" value={searchObject.searchValue} changeHandler={(event) => setSearchObject({ ...searchObject, searchValue: event.target.value })} />
+            <Filter value={searchObject.searchCategory} changeHandler={(event) => setSearchObject({ ...searchObject, searchCategory: event.target.value })} />
+        </div>
+        <AdviceCardList advices={advices.filter(advice => advice.text.toLowerCase().includes(searchObject.searchValue.toLowerCase()) && (searchObject.searchCategory === "all" || advice.category.toLowerCase().includes(searchObject.searchCategory.toLowerCase())))} />
         {/* {
             // I would give list of advices and i want list of AdviceCard Component
             advices.map(advice => <AdviceCard advice={advice} />)
