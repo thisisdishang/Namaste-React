@@ -21,6 +21,9 @@ import AdviceCardList from "./components/AdviceCardList/AdviceCardList";
 import SearchBox from "./components/SearchBox/SearchBox";
 import { useState } from "react";
 import Filter from "./components/Filter/Filter";
+import AbstractButton from "./components/AbstractButton/AbstractButton";
+
+const url = 'https://api.adviceslip.com/advice';
 
 function App() {
     // destructuring the array
@@ -37,7 +40,9 @@ function App() {
     and that array has two elements - value, function to change the value.
     */
 
-    const advices = [
+    const [error, setError] = useState("")
+
+    const [advices, setAdvices] = useState([
         {
             id: 1,
             text: "Plant a Tree!",
@@ -63,15 +68,39 @@ function App() {
             text: "The Only Constant is Change!",
             category: "philosophical"
         },
-    ];
+    ]);
+
+    /*
+        Frontend: API -> Backend
+        Side effects: API Calling, DOM Manipulation, Button Click
+    */
+    const fetchRandomAdvice = async () => {
+        // In Java: CompletableFuture
+        // fetch(url) // Promise 1: url
+        //     .then(response => response.json()) // Promise 2: json
+        //     .then(data => setAdvices([...advices, { id: advices.length + 1, text: data.slip.advice, category: "philosophical" }]))
+        //     .catch(err => console.log(err.message))
+
+        // Try using async await
+        try {
+            const response = await fetch(url); // Promise 1: resolve of the url
+            const data = await response.json(); // Promise 2: resolve of the json
+            setAdvices([...advices, { id: advices.length + 1, text: data.slip.advice, category: "philosophical" }])
+        }
+        catch (error) {
+            setError(error.message)
+        }
+    }
 
     return <>
         <Header />
         <div style={{ textAlign: 'center' }}>
             <SearchBox placeholder="Search for advice" value={searchObject.searchValue} changeHandler={(event) => setSearchObject({ ...searchObject, searchValue: event.target.value })} />
             <Filter value={searchObject.searchCategory} changeHandler={(event) => setSearchObject({ ...searchObject, searchCategory: event.target.value })} />
+            <AbstractButton label="Random Advice" clickHandler={fetchRandomAdvice} />
         </div>
-        <AdviceCardList advices={advices.filter(advice => advice.text.toLowerCase().includes(searchObject.searchValue.toLowerCase()) && (searchObject.searchCategory === "all" || advice.category.toLowerCase().includes(searchObject.searchCategory.toLowerCase())))} />
+        {error && <p>{error}</p>}
+        <AdviceCardList advices={advices.filter(advice => advice.text.toLowerCase().includes(searchObject.searchValue.toLowerCase()) && (searchObject.searchCategory.toLowerCase() === "all" || advice.category.toLowerCase().includes(searchObject.searchCategory.toLowerCase())))} />
         {/* {
             // I would give list of advices and i want list of AdviceCard Component
             advices.map(advice => <AdviceCard advice={advice} />)
