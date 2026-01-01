@@ -1,111 +1,59 @@
 /*
-Components:
-    - Components are the building blocks of React application.
-    - Components are reusable and can be nested.
-    - Components consists of HTML, CSS and Behavior.
+    useEffect Hook:
+    - useEffect is used to perform side effects in React components.
+    - Side effects: API Calling, DOM Manipulation, Button Click
 
-3 main questions developer should have when working on react application
-Q1: How many component i am going to create?
-    - Create as many components as needed
-
-Q2: What would be my state of component?
-    - State is the data that is used to render the component and it will change based on the interaction,
-      because of interaction your UI would change.
-
-Q3: Where I should create the state?
-    - Follow the concept of 'lift the state up'.
+    Syntax: useEffect(callback, dependencies)
+    
+    3 Main Patterns:
+    1. useEffect(() => {})           → Runs on mount + re-rendering (any state changes)
+    2. useEffect(() => {}, [])       → Runs ONLY on mount
+    3. useEffect(() => {}, [value])  → Runs on mount + when 'value' changes
 */
 
-import Header from "./components/Header/Header";
-import AdviceCardList from "./components/AdviceCardList/AdviceCardList";
-import SearchBox from "./components/SearchBox/SearchBox";
-import { useState } from "react";
-import Filter from "./components/Filter/Filter";
-import AbstractButton from "./components/AbstractButton/AbstractButton";
-
-const url = 'https://api.adviceslip.com/advice';
+import { useState, useEffect } from "react";
 
 function App() {
-    // destructuring the array
-    const [searchObject, setSearchObject] = useState({ searchValue: "", searchCategory: "all" })
-    /*
-        Here state is object
-        state:{
-            searchValue: '',
-            searchCategory: ''
-        }
-    */
-    /* 
-    useState is a hook=> is a JavaScript function that returns an array.
-    and that array has two elements - value, function to change the value.
-    */
+    const [searchValue, setSearchValue] = useState("");
 
-    const [error, setError] = useState("")
+    // Pattern 1: mount + re-rendering (any state changes)
+    useEffect(() => {
+        console.log("I am re-rendering");
+    });
 
-    const [advices, setAdvices] = useState([
-        {
-            id: 1,
-            text: "Plant a Tree!",
-            category: "actionable"
-        },
-        {
-            id: 2,
-            text: "Ego is the Enemy!",
-            category: "philosophical"
-        },
-        {
-            id: 3,
-            text: "Obstacle is the Way!",
-            category: "actionable"
-        },
-        {
-            id: 4,
-            text: "Stillness is the Key!",
-            category: "philosophical"
-        },
-        {
-            id: 5,
-            text: "The Only Constant is Change!",
-            category: "philosophical"
-        },
-    ]);
+    // Pattern 2: mount only (empty dependency array)
+    useEffect(() => {
+        console.log("calling advice API once");
+        fetch('https://api.adviceslip.com/advice/search/tree')
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err.message))
+    }, []);
 
-    /*
-        Frontend: API -> Backend
-        Side effects: API Calling, DOM Manipulation, Button Click
-    */
-    const fetchRandomAdvice = async () => {
-        // In Java: CompletableFuture
-        // fetch(url) // Promise 1: url
-        //     .then(response => response.json()) // Promise 2: json
-        //     .then(data => setAdvices([...advices, { id: advices.length + 1, text: data.slip.advice, category: "philosophical" }]))
-        //     .catch(err => console.log(err.message))
+    // Pattern 3: mount + only when searchValue changes
+    useEffect(() => {
+        console.log("calling advice API with search query");
+        fetch(`https://api.adviceslip.com/advice/search/${searchValue}`)
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err.message))
+    }, [searchValue]);
 
-        // Try using async await
-        try {
-            const response = await fetch(url); // Promise 1: resolve of the url
-            const data = await response.json(); // Promise 2: resolve of the json
-            setAdvices([...advices, { id: advices.length + 1, text: data.slip.advice, category: "philosophical" }])
-        }
-        catch (error) {
-            setError(error.message)
-        }
-    }
+    return (
+        <div style={{ padding: "20px" }}>
+            <h1>useEffect Demo</h1>
+            <p>Open browser console (F12) to see useEffect in action!</p>
 
-    return <>
-        <Header />
-        <div style={{ textAlign: 'center' }}>
-            <SearchBox placeholder="Search for advice" value={searchObject.searchValue} changeHandler={(event) => setSearchObject({ ...searchObject, searchValue: event.target.value })} />
-            <Filter value={searchObject.searchCategory} changeHandler={(event) => setSearchObject({ ...searchObject, searchCategory: event.target.value })} />
-            <AbstractButton label="Random Advice" clickHandler={fetchRandomAdvice} />
+            <input
+                type="text"
+                placeholder="Search..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                style={{ padding: "8px", fontSize: "16px" }}
+            />
+            <p>Type something to trigger the useEffect with [searchValue] dependency</p>
         </div>
-        {error && <p>{error}</p>}
-        <AdviceCardList advices={advices.filter(advice => advice.text.toLowerCase().includes(searchObject.searchValue.toLowerCase()) && (searchObject.searchCategory.toLowerCase() === "all" || advice.category.toLowerCase().includes(searchObject.searchCategory.toLowerCase())))} />
-        {/* {
-            // I would give list of advices and i want list of AdviceCard Component
-            advices.map(advice => <AdviceCard advice={advice} />)
-        } */}
-    </>
+    );
 }
 
 export default App;
