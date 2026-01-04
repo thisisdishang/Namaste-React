@@ -22,6 +22,7 @@ import SearchBox from "./components/SearchBox/SearchBox";
 import { useState } from "react";
 import Filter from "./components/Filter/Filter";
 import AbstractButton from "./components/AbstractButton/AbstractButton";
+import { useAdvice } from "./hooks/useAdvice";
 
 const url = 'https://api.adviceslip.com/advice';
 
@@ -91,6 +92,9 @@ function App() {
             setError(error.message)
         }
     }
+
+    // Custom Hook: useAdvice
+    // const { advices, error, fetchRandomAdvice } = useAdvice();
 
     return <>
         <Header />
