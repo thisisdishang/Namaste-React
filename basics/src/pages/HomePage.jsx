@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
-import "./HomePage.css"
+// Scoped JavaScript object
+// CSS in JavaScript
+import style from "./HomePage.module.css"
 
 const HomePage = () => {
     return (
-        <div>
+        <div className={style.container}>
             <h1>This is Home Page</h1>
-            <Link to="/pricing">Pricing</Link>
+            <Link to="/pricing">Pricing</Link>&nbsp;&nbsp;
             <Link to="/product">Products</Link>
         </div>)
 }
