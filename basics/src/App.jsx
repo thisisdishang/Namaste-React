@@ -1,26 +1,50 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ProductPage from "./pages/ProductPage";
-import PricingPage from "./pages/PricingPage";
-import RootLayout from "./pages/RootLayout";
-import NotFoundPage from "./pages/NotFoundPage";
-
-// Nested Routes
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <RootLayout />,
-        children: [
-            { path: "/", element: <HomePage /> },
-            { path: "/pricing", element: <PricingPage /> },
-            { path: "/product", element: <ProductPage /> },
-            { path: "*", element: <NotFoundPage /> }
-        ]
-    }
-])
+import { createStore } from "redux";
 
 function App() {
-    return <RouterProvider router={router} />
+    return <>
+        <h1>Hello Redux!</h1>
+    </>
 }
+
+// action generators
+const resetAction = (payload = 0) => {
+    // preprocessing
+    return { type: "RESET", payload: payload }
+}
+
+const addAction = (payload = 1) => {
+    return { type: "ADD", payload: payload }
+}
+
+const subtractAction = (payload = 1) => {
+    return { type: "SUBTRACT", payload: payload }
+}
+
+// reducer
+const reducer = (state = { description: 'This is redux store state' }, action) => {
+    switch (action.type) {
+        case "RESET":
+            // return a new JavaScript object.
+            return { ...state, counter: 1 };
+        case "ADD":
+            return { ...state, counter: state.counter + action.payload };
+        case "SUBTRACT":
+            return { ...state, counter: state.counter - action.payload };
+        default:
+            return state;
+    }
+};
+
+const store = createStore(reducer);
+
+console.log(`The state is ${JSON.stringify(store.getState())}`)
+
+// Action object should have mandatory 'type' property
+store.dispatch(resetAction())
+console.log(`After dispatching RESET action, The state is ${JSON.stringify(store.getState())}`)
+store.dispatch(addAction(10))
+console.log(`After dispatching ADD action, The state is ${JSON.stringify(store.getState())}`)
+store.dispatch(subtractAction())
+console.log(`After dispatching SUBTRACT action, The state is ${JSON.stringify(store.getState())}`)
 
 export default App;
