@@ -1,4 +1,5 @@
-import { createStore } from "redux";
+import { resetCounterAction, addCounterAction, subtractCounterAction } from "./redux/actions/counterAction";
+import { configureStore } from "./redux/configureStore";
 
 function App() {
     return <>
@@ -6,45 +7,16 @@ function App() {
     </>
 }
 
-// action generators
-const resetAction = (payload = 0) => {
-    // preprocessing
-    return { type: "RESET", payload: payload }
-}
-
-const addAction = (payload = 1) => {
-    return { type: "ADD", payload: payload }
-}
-
-const subtractAction = (payload = 1) => {
-    return { type: "SUBTRACT", payload: payload }
-}
-
-// reducer
-const reducer = (state = { description: 'This is redux store state' }, action) => {
-    switch (action.type) {
-        case "RESET":
-            // return a new JavaScript object.
-            return { ...state, counter: 1 };
-        case "ADD":
-            return { ...state, counter: state.counter + action.payload };
-        case "SUBTRACT":
-            return { ...state, counter: state.counter - action.payload };
-        default:
-            return state;
-    }
-};
-
-const store = createStore(reducer);
+const store = configureStore();
 
 console.log(`The state is ${JSON.stringify(store.getState())}`)
 
 // Action object should have mandatory 'type' property
-store.dispatch(resetAction())
+store.dispatch(resetCounterAction())
 console.log(`After dispatching RESET action, The state is ${JSON.stringify(store.getState())}`)
-store.dispatch(addAction(10))
+store.dispatch(addCounterAction(10))
 console.log(`After dispatching ADD action, The state is ${JSON.stringify(store.getState())}`)
-store.dispatch(subtractAction())
+store.dispatch(subtractCounterAction())
 console.log(`After dispatching SUBTRACT action, The state is ${JSON.stringify(store.getState())}`)
 
 export default App;
