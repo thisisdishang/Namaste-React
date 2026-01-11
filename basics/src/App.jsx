@@ -1,22 +1,18 @@
-import { resetCounterAction, addCounterAction, subtractCounterAction } from "./redux/actions/counterAction";
-import { configureStore } from "./redux/configureStore";
+import Header from "./components/Header/Header";
+import Counter from "./components/Counter/Counter";
+import MyButton from "./components/MyButton/MyButton";
 
 function App() {
-    return <>
-        <h1>Hello Redux!</h1>
-    </>
+    return <div>
+        <Header />
+        <MyButton />
+        <Counter />
+    </div>
 }
 
-const store = configureStore();
-
-console.log(`The state is ${JSON.stringify(store.getState())}`)
-
-// Action object should have mandatory 'type' property
-store.dispatch(resetCounterAction())
-console.log(`After dispatching RESET action, The state is ${JSON.stringify(store.getState())}`)
-store.dispatch(addCounterAction(10))
-console.log(`After dispatching ADD action, The state is ${JSON.stringify(store.getState())}`)
-store.dispatch(subtractCounterAction())
-console.log(`After dispatching SUBTRACT action, The state is ${JSON.stringify(store.getState())}`)
+/*
+    Provider : Component
+    connect() : function
+*/
 
 export default App;
